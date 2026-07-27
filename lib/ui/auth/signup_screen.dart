@@ -24,7 +24,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
     passwordController.dispose();
     super.dispose();
   }
-
+void signUp()async{
+  if (formKey.currentState!.validate()) {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      await _authService.signUp(
+        emailController.text.trim(),
+        passwordController.text.trim(),
+      );
+      setState(() {
+        isLoading = false;
+      });
+      Utils().toastMessage("Sign up successful!");
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginScreen(),
+          ),
+        );
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      Utils().toastMessage(e.toString());
+    }
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,36 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () async {
-                if (formKey.currentState!.validate()) {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  try {
-                    await _authService.signUp(
-                      emailController.text.trim(),
-                      passwordController.text.trim(),
-                    );
-                    setState(() {
-                      isLoading = false;
-                    });
-                    Utils().toastMessage("Sign up successful!");
-                    if (context.mounted) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginScreen(),
-                        ),
-                      );
-                    }
-                  } catch (e) {
-                    setState(() {
-                      isLoading = false;
-                    });
-                    Utils().toastMessage(e.toString());
-                  }
-                }
-              },
+              onPressed:signUp,
               child: isLoading
                   ? CircularProgressIndicator(color: Colors.white)
                   : Text("Sign Up", style: TextStyle(color: Colors.white)),

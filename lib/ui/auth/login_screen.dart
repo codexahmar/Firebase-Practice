@@ -23,7 +23,34 @@ class _LoginScreenState extends State<LoginScreen> {
     passwordController.dispose();
     super.dispose();
   }
-
+void login()async{
+  if (formKey.currentState!.validate()) {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      await _authService.signIn(
+        emailController.text.trim(),
+        passwordController.text.trim(),
+      );
+      setState(() {
+        isLoading = false;
+      });
+      Utils().toastMessage("Login successful!");
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      Utils().toastMessage(e.toString());
+    }
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,34 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () async {
-                if (formKey.currentState!.validate()) {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  try {
-                    await _authService.signIn(
-                      emailController.text.trim(),
-                      passwordController.text.trim(),
-                    );
-                    setState(() {
-                      isLoading = false;
-                    });
-                    Utils().toastMessage("Login successful!");
-                    if (context.mounted) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
-                      );
-                    }
-                  } catch (e) {
-                    setState(() {
-                      isLoading = false;
-                    });
-                    Utils().toastMessage(e.toString());
-                  }
-                }
-              },
+              onPressed: login,
               child: isLoading
                   ? CircularProgressIndicator(color: Colors.white)
                   : Text("Login", style: TextStyle(color: Colors.white)),
