@@ -1,6 +1,8 @@
 import 'package:firebase_practice/services/auth_service.dart';
 import 'package:firebase_practice/ui/auth/login_screen.dart';
 import 'package:firebase_practice/utils/utils.dart';
+import 'package:firebase_practice/widgets/custom_text_field.dart';
+import 'package:firebase_practice/widgets/round_button.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -61,76 +63,57 @@ void signUp()async{
         title: Text("Sign Up", style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: Colors.black,
+        elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Form(
               key: formKey,
               child: Column(
                 children: [
-                  TextFormField(
+                  CustomTextField(
+                    controller: emailController,
+                    hintText: "Email",
+                    prefixIcon: Icons.email_outlined,
+                    keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
                       }
                       return null;
                     },
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.email),
-                      hintText: "Email",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
                   ),
-                  SizedBox(height: 16),
-                  TextFormField(
+                  const SizedBox(height: 20),
+                  CustomTextField(
+                    controller: passwordController,
+                    hintText: "Password",
+                    prefixIcon: Icons.lock_outline,
+                    obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
                       }
                       return null;
                     },
-                    controller: passwordController,
-                    obscureText: true,
-                    keyboardType: TextInputType.visiblePassword,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.lock),
-                      hintText: "Password",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
                   ),
                 ],
               ),
             ),
-
-            SizedBox(height: 16),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50),
-                backgroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed:signUp,
-              child: isLoading
-                  ? CircularProgressIndicator(color: Colors.white)
-                  : Text("Sign Up", style: TextStyle(color: Colors.white)),
+            const SizedBox(height: 40),
+            RoundButton(
+              title: "Sign Up",
+              loading: isLoading,
+              onTap: signUp,
             ),
-
-            SizedBox(height: 16),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Already have an account? "),
+                const Text("Already have an account? "),
                 TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -138,7 +121,11 @@ void signUp()async{
                       MaterialPageRoute(builder: (context) => LoginScreen()),
                     );
                   },
-                  child: Text("Sign In", style: TextStyle(color: Colors.blue)),
+                  child: const Text("Sign In",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      )),
                 ),
               ],
             ),

@@ -2,6 +2,8 @@ import 'package:firebase_practice/services/auth_service.dart';
 import 'package:firebase_practice/ui/auth/signup_screen.dart';
 import 'package:firebase_practice/ui/home_screen.dart';
 import 'package:firebase_practice/utils/utils.dart';
+import 'package:firebase_practice/widgets/custom_text_field.dart';
+import 'package:firebase_practice/widgets/round_button.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -58,26 +60,23 @@ void login()async{
         title: Text("Login", style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: Colors.black,
+        elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Form(
               key: formKey,
               child: Column(
                 children: [
-                  TextFormField(
+                  CustomTextField(
                     controller: emailController,
+                    hintText: "Email",
+                    prefixIcon: Icons.email_outlined,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.email),
-                      hintText: "Email",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
@@ -85,18 +84,12 @@ void login()async{
                       return null;
                     },
                   ),
-                  SizedBox(height: 16),
-                  TextFormField(
+                  const SizedBox(height: 20),
+                  CustomTextField(
                     controller: passwordController,
+                    hintText: "Password",
+                    prefixIcon: Icons.lock_outline,
                     obscureText: true,
-                    keyboardType: TextInputType.visiblePassword,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.lock),
-                      hintText: "Password",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
@@ -107,27 +100,17 @@ void login()async{
                 ],
               ),
             ),
-
-            SizedBox(height: 16),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                maximumSize: Size(double.infinity, 50),
-                backgroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: login,
-              child: isLoading
-                  ? CircularProgressIndicator(color: Colors.white)
-                  : Text("Login", style: TextStyle(color: Colors.white)),
+            const SizedBox(height: 40),
+            RoundButton(
+              title: "Login",
+              loading: isLoading,
+              onTap: login,
             ),
-
-            SizedBox(height: 16),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Don't have an account? "),
+                const Text("Don't have an account? "),
                 TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -135,7 +118,11 @@ void login()async{
                       MaterialPageRoute(builder: (context) => SignUpScreen()),
                     );
                   },
-                  child: Text("Sign Up", style: TextStyle(color: Colors.blue)),
+                  child: const Text("Sign Up",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      )),
                 ),
               ],
             ),

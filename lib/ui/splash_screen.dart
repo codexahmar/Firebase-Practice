@@ -19,10 +19,35 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text(
-          "Firebase Practice",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      body: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.black87, Colors.black],
+          ),
+        ),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.flash_on,
+              size: 100,
+              color: Colors.white,
+            ),
+            SizedBox(height: 20),
+            Text(
+              "Firebase Practice",
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                letterSpacing: 2,
+              ),
+            ),
+
+          ],
         ),
       ),
     );
