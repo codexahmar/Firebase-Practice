@@ -1,4 +1,5 @@
 import 'package:firebase_practice/services/auth_service.dart';
+import 'package:firebase_practice/ui/auth/login_with_number.dart';
 import 'package:firebase_practice/ui/auth/signup_screen.dart';
 import 'package:firebase_practice/ui/home_screen.dart';
 import 'package:firebase_practice/utils/utils.dart';
@@ -126,6 +127,11 @@ void login()async{
                 ),
               ],
             ),
+            SizedBox(height: 30,),
+
+            RoundButton(title: "Login with Phone Number", onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginWithNumber() ));
+            })
           ],
         ),
       ),
