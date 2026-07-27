@@ -1,5 +1,6 @@
-import 'package:firebase_practice/service/auth_service.dart';
+import 'package:firebase_practice/services/auth_service.dart';
 import 'package:firebase_practice/ui/auth/login_screen.dart';
+import 'package:firebase_practice/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -92,10 +93,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
               onPressed: () {
                 if (formKey.currentState!.validate()) {
                   // Handle sign up logic here
-                  _authService.signUp(
-                    emailController.text,
-                    passwordController.text,
-                  );
+                  _authService
+                      .signUp(emailController.text, passwordController.text)
+                      .then((value) {
+                        Utils().toastMessage("Sign up successful!");
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(),
+                          ),
+                        );
+                      })
+                      .onError((e, stackTrace) {
+                        Utils().toastMessage(e.toString());
+                      });
                 }
               },
               child: Text("Sign Up", style: TextStyle(color: Colors.white)),

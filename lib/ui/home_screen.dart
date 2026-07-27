@@ -1,4 +1,4 @@
-import 'package:firebase_practice/service/auth_service.dart';
+import 'package:firebase_practice/services/auth_service.dart';
 import 'package:firebase_practice/ui/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 

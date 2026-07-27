@@ -5,20 +5,25 @@ class AuthService {
 
   Future signUp(String email, password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+     return await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
       print(e.toString());
+      rethrow;
     }
   }
 
   Future signIn(String email, password) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-    } catch (e) {
+      return await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
       print(e.toString());
+      rethrow;
     }
   }
 

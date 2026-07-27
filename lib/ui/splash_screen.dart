@@ -1,4 +1,4 @@
-import 'package:firebase_practice/service/splash_service.dart';
+import 'package:firebase_practice/services/splash_service.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {

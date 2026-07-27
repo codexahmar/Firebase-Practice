@@ -1,6 +1,7 @@
-import 'package:firebase_practice/service/auth_service.dart';
+import 'package:firebase_practice/services/auth_service.dart';
 import 'package:firebase_practice/ui/auth/signup_screen.dart';
 import 'package:firebase_practice/ui/home_screen.dart';
+import 'package:firebase_practice/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -93,12 +94,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Handle login logic here
                   _authService
                       .signIn(emailController.text, passwordController.text)
-                      .then(
-                        ((value) => Navigator.pushReplacement(
+                      .then((value) {
+                        Utils().toastMessage("Login successful!");
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => HomeScreen()),
-                        )),
-                      );
+                        );
+                      })
+                      .onError((error, stackTrace) {
+                        Utils().toastMessage(error.toString());
+                      });
                 }
               },
               child: Text("Login", style: TextStyle(color: Colors.white)),
