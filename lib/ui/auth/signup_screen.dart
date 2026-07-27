@@ -14,6 +14,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   AuthService _authService = AuthService();
 
@@ -84,32 +85,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
             SizedBox(height: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                maximumSize: Size(double.infinity, 50),
+                minimumSize: Size(double.infinity, 50),
                 backgroundColor: Colors.black,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  // Handle sign up logic here
-                  _authService
-                      .signUp(emailController.text, passwordController.text)
-                      .then((value) {
-                        Utils().toastMessage("Sign up successful!");
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
-                          ),
-                        );
-                      })
-                      .onError((e, stackTrace) {
-                        Utils().toastMessage(e.toString());
-                      });
+                  setState(() {
+                    isLoading = true;
+                  });
+                  try {
+                    await _authService.signUp(
+                      emailController.text.trim(),
+                      passwordController.text.trim(),
+                    );
+                    setState(() {
+                      isLoading = false;
+                    });
+                    Utils().toastMessage("Sign up successful!");
+                    if (context.mounted) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                    Utils().toastMessage(e.toString());
+                  }
                 }
               },
-              child: Text("Sign Up", style: TextStyle(color: Colors.white)),
+              child: isLoading
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text("Sign Up", style: TextStyle(color: Colors.white)),
             ),
 
             SizedBox(height: 16),

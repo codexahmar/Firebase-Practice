@@ -15,6 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool isLoading = false;
   AuthService _authService = AuthService();
   @override
   void dispose() {
@@ -89,24 +90,37 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  // Handle login logic here
-                  _authService
-                      .signIn(emailController.text, passwordController.text)
-                      .then((value) {
-                        Utils().toastMessage("Login successful!");
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
-                        );
-                      })
-                      .onError((error, stackTrace) {
-                        Utils().toastMessage(error.toString());
-                      });
+                  setState(() {
+                    isLoading = true;
+                  });
+                  try {
+                    await _authService.signIn(
+                      emailController.text.trim(),
+                      passwordController.text.trim(),
+                    );
+                    setState(() {
+                      isLoading = false;
+                    });
+                    Utils().toastMessage("Login successful!");
+                    if (context.mounted) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
+                    }
+                  } catch (e) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                    Utils().toastMessage(e.toString());
+                  }
                 }
               },
-              child: Text("Login", style: TextStyle(color: Colors.white)),
+              child: isLoading
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text("Login", style: TextStyle(color: Colors.white)),
             ),
 
             SizedBox(height: 16),
