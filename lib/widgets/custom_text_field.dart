@@ -27,11 +27,9 @@ class CustomTextField extends StatelessWidget {
       obscureText: obscureText,
       keyboardType: keyboardType,
       validator: validator,
-      maxLines: maxLines,
+      maxLines: obscureText ? 1 : (maxLines ?? 1),
       style: const TextStyle(fontSize: 16),
       decoration: InputDecoration(
-        
-        fillColor: Colors.grey.shade200,
         hintText: hintText,
         hintStyle: TextStyle(color: Colors.grey.shade700),
         prefixIcon: Icon(prefixIcon, color: Colors.black87),
@@ -41,7 +39,7 @@ class CustomTextField extends StatelessWidget {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide.none,
+          borderSide: const BorderSide(color: Colors.black, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
