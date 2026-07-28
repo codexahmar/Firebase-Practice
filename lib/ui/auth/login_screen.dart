@@ -1,4 +1,5 @@
 import 'package:firebase_practice/services/auth_service.dart';
+import 'package:firebase_practice/ui/auth/forgotPass_screen.dart';
 import 'package:firebase_practice/ui/auth/login_with_number.dart';
 import 'package:firebase_practice/ui/auth/signup_screen.dart';
 import 'package:firebase_practice/ui/home_screen.dart';
@@ -26,34 +27,36 @@ class _LoginScreenState extends State<LoginScreen> {
     passwordController.dispose();
     super.dispose();
   }
-void login()async{
-  if (formKey.currentState!.validate()) {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      await _authService.signIn(
-        emailController.text.trim(),
-        passwordController.text.trim(),
-      );
+
+  void login() async {
+    if (formKey.currentState!.validate()) {
       setState(() {
-        isLoading = false;
+        isLoading = true;
       });
-      Utils().toastMessage("Login successful!");
-      if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+      try {
+        await _authService.signIn(
+          emailController.text.trim(),
+          passwordController.text.trim(),
         );
+        setState(() {
+          isLoading = false;
+        });
+        Utils().toastMessage("Login successful!");
+        if (context.mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        }
+      } catch (e) {
+        setState(() {
+          isLoading = false;
+        });
+        Utils().toastMessage(e.toString());
       }
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      Utils().toastMessage(e.toString());
     }
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,12 +105,23 @@ void login()async{
               ),
             ),
             const SizedBox(height: 40),
-            RoundButton(
-              title: "Login",
-              loading: isLoading,
-              onTap: login,
-            ),
+            RoundButton(title: "Login", loading: isLoading, onTap: login),
             const SizedBox(height: 20),
+            Align(
+              alignment: Alignment.centerRight,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ForgotpassScreen()),
+                  );
+                },
+                child: Text(
+                  "Forgot Password?",
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -119,19 +133,27 @@ void login()async{
                       MaterialPageRoute(builder: (context) => SignUpScreen()),
                     );
                   },
-                  child: const Text("Sign Up",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                      )),
+                  child: const Text(
+                    "Sign Up",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ],
             ),
-            SizedBox(height: 30,),
+            SizedBox(height: 30),
 
-            RoundButton(title: "Login with Phone Number", onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginWithNumber() ));
-            })
+            RoundButton(
+              title: "Login with Phone Number",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginWithNumber()),
+                );
+              },
+            ),
           ],
         ),
       ),

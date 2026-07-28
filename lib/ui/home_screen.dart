@@ -4,6 +4,7 @@ import 'package:firebase_practice/services/auth_service.dart';
 import 'package:firebase_practice/services/realtime_db.dart';
 import 'package:firebase_practice/ui/auth/login_screen.dart';
 import 'package:firebase_practice/ui/post_screen.dart';
+import 'package:firebase_practice/utils/utils.dart';
 import 'package:firebase_practice/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 
@@ -48,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.of(context).pop();
 
                 await _realtimeDb.updatePost(id, editController.text.trim());
+                Utils().toastMessage("Post updated successfully");
               },
             ),
           ],
@@ -75,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () async {
                 Navigator.of(context).pop();
                 await _realtimeDb.deletePost(id);
+                Utils().toastMessage("Post updated successfully");
               },
             ),
           ],
