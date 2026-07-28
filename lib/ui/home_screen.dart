@@ -33,9 +33,18 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Column(children: [
-      
-      ],),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(
+            child: Text(
+              "No posts available",
+              style: TextStyle(fontSize: 20, color: Colors.black),
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         foregroundColor: Colors.white,
         backgroundColor: Colors.black,
