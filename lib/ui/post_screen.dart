@@ -18,20 +18,19 @@ class _PostScreenState extends State<PostScreen> {
 
   void postData() async {
     try {
+      if (postController.text.isEmpty) {
+        Utils().toastMessage("Please enter a post.");
+        return;
+      }
+
       setState(() {
         isLoading = true;
       });
 
-      if (postController.text.isEmpty) {
-        Utils().toastMessage("Please enter a post.");
-        setState(() {
-          isLoading = false;
-        });
-        return;
-      }
       await _realtimeDb.writePost(postController.text.toString());
       setState(() {
         isLoading = false;
+        postController.clear();
       });
       Utils().toastMessage("Post added successfully!");
     } catch (e) {
