@@ -1,5 +1,6 @@
 import 'package:firebase_practice/services/auth_service.dart';
 import 'package:firebase_practice/ui/auth/login_screen.dart';
+import 'package:firebase_practice/ui/post_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,11 +33,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Center(
-        child: Text(
-          "Welcome to the Home Screen!",
-          style: TextStyle(fontSize: 24),
-        ),
+      body: Column(children: [
+      
+      ],),
+      floatingActionButton: FloatingActionButton(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.black,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PostScreen()),
+          );
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
