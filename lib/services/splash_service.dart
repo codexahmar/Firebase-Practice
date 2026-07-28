@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_practice/ui/auth/login_screen.dart';
-import 'package:firebase_practice/ui/home_screen.dart';
+import 'package:firebase_practice/ui/realtimeDb/home_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../ui/firestore/firestore_list_screen.dart';

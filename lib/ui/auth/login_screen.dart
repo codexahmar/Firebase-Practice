@@ -2,7 +2,7 @@ import 'package:firebase_practice/services/auth_service.dart';
 import 'package:firebase_practice/ui/auth/forgotPass_screen.dart';
 import 'package:firebase_practice/ui/auth/login_with_number.dart';
 import 'package:firebase_practice/ui/auth/signup_screen.dart';
-import 'package:firebase_practice/ui/home_screen.dart';
+import 'package:firebase_practice/ui/realtimeDb/home_screen.dart';
 import 'package:firebase_practice/utils/utils.dart';
 import 'package:firebase_practice/widgets/custom_text_field.dart';
 import 'package:firebase_practice/widgets/round_button.dart';

@@ -5,7 +5,7 @@ import 'package:firebase_practice/widgets/round_button.dart';
 import 'package:flutter/material.dart';
 
 class PostScreen extends StatefulWidget {
-  PostScreen({super.key});
+  const PostScreen({super.key});
 
   @override
   State<PostScreen> createState() => _PostScreenState();
@@ -13,26 +13,29 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreenState extends State<PostScreen> {
   final postController = TextEditingController();
-  RealtimeDb _realtimeDb = RealtimeDb();
+  final RealtimeDb _realtimeDb = RealtimeDb();
   bool isLoading = false;
 
   void postData() async {
+    if (postController.text.isEmpty) {
+      Utils().toastMessage("Please enter a post.");
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
     try {
-      if (postController.text.isEmpty) {
-        Utils().toastMessage("Please enter a post.");
-        return;
-      }
-
-      setState(() {
-        isLoading = true;
-      });
-
-      await _realtimeDb.writePost(postController.text.toString());
+      await _realtimeDb.writePost(postController.text.trim());
       setState(() {
         isLoading = false;
         postController.clear();
       });
-      Utils().toastMessage("Post added successfully!");
+      Utils().toastMessage("Post added to Realtime Database!");
+      if (mounted) {
+        Navigator.pop(context);
+      }
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -45,22 +48,31 @@ class _PostScreenState extends State<PostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Post Screen", style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-        backgroundColor: Colors.black,
+        title: const Text("Add Realtime Post"),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           children: [
+            const SizedBox(height: 30),
+            const Icon(
+              Icons.cloud_upload_outlined,
+              size: 80,
+              color: Colors.black87,
+            ),
+            const SizedBox(height: 30),
             CustomTextField(
               controller: postController,
-              hintText: "Enter your post here...",
-              maxLines: 5,
+              hintText: "What's on your mind?",
+              prefixIcon: Icons.post_add,
+              maxLines: 4,
             ),
-            Spacer(),
-            RoundButton(title: "Post", onTap: postData, loading: isLoading),
-            SizedBox(height: 80),
+            const SizedBox(height: 40),
+            RoundButton(
+              title: "Publish Post",
+              onTap: postData,
+              loading: isLoading,
+            ),
           ],
         ),
       ),

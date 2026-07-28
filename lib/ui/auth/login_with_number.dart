@@ -1,5 +1,5 @@
 import 'package:firebase_practice/services/auth_service.dart';
-import 'package:firebase_practice/ui/home_screen.dart';
+import 'package:firebase_practice/ui/realtimeDb/home_screen.dart';
 import 'package:firebase_practice/utils/utils.dart';
 import 'package:firebase_practice/widgets/custom_text_field.dart';
 import 'package:firebase_practice/widgets/round_button.dart';

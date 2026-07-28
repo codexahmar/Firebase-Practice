@@ -17,6 +17,10 @@ class _ForgotpassScreenState extends State<ForgotpassScreen> {
   bool isLoading = false;
 
   void resetPassword() async {
+    if (emailController.text.isEmpty) {
+      Utils().toastMessage("Please enter your email");
+      return;
+    }
     setState(() {
       isLoading = true;
     });
@@ -25,7 +29,7 @@ class _ForgotpassScreenState extends State<ForgotpassScreen> {
       setState(() {
         isLoading = false;
       });
-      Utils().toastMessage("Password reset email sent!");
+      Utils().toastMessage("Password reset email sent! Check your inbox.");
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -37,22 +41,40 @@ class _ForgotpassScreenState extends State<ForgotpassScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Forgot Password')),
+      appBar: AppBar(
+        title: const Text('Forgot Password'),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: CustomTextField(
-                controller: emailController,
-                hintText: 'Enter your email',
-                obscureText: false,
-              ),
+            const Icon(
+              Icons.lock_reset,
+              size: 80,
+              color: Colors.black87,
             ),
+            const SizedBox(height: 20),
+            const Text(
+              "Reset your password",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              "Enter your email and we'll send you a link to reset your password.",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey),
+            ),
+            const SizedBox(height: 40),
+            CustomTextField(
+              controller: emailController,
+              hintText: 'Email Address',
+              prefixIcon: Icons.email_outlined,
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 30),
             RoundButton(
-              title: "Reset Password",
+              title: "Send Link",
               onTap: resetPassword,
               loading: isLoading,
             ),
