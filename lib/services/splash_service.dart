@@ -4,6 +4,8 @@ import 'package:firebase_practice/ui/auth/login_screen.dart';
 import 'package:firebase_practice/ui/home_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../ui/firestore/firestore_list_screen.dart';
+
 class SplashService {
 
   void isLogin(BuildContext context) {
@@ -14,7 +16,7 @@ class SplashService {
       Timer(Duration(seconds: 3), () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => FirestoreListScreen()),
         );
       });
     }
