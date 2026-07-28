@@ -1,8 +1,10 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_practice/services/auth_service.dart';
+import 'package:firebase_practice/services/realtime_db.dart';
 import 'package:firebase_practice/ui/auth/login_screen.dart';
 import 'package:firebase_practice/ui/post_screen.dart';
+import 'package:firebase_practice/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,8 +16,78 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   AuthService _authService = AuthService();
+  RealtimeDb _realtimeDb = RealtimeDb();
   final _dbRef = FirebaseDatabase.instance.ref("posts");
   final searchController = TextEditingController();
+  final editController = TextEditingController();
+
+  Future<void> editDialogBox(String title, id) {
+    editController.text = title;
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Edit"),
+          content: Container(
+            child: CustomTextField(
+              controller: editController,
+              hintText: "Edit post",
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Update"),
+              onPressed: () async {
+                // Handle edit logic here
+                Navigator.of(context).pop();
+
+                await _realtimeDb.updatePost(id, editController.text.trim());
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> deleteDialogBox(String id) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Delete"),
+          content: Text("Are you sure you want to delete this post?"),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Delete"),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _realtimeDb.deletePost(id);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,9 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               onChanged: (value) {
-                setState(() {
-                  // Trigger a rebuild to update the list based on the search query
-                });
+                setState(() {});
               },
             ),
 
@@ -69,7 +139,28 @@ class _HomeScreenState extends State<HomeScreen> {
                   final post = snapshot.value as Map<dynamic, dynamic>;
 
                   if (searchController.text.isEmpty) {
-                    return ListTile(title: Text(post['title'] ?? 'N/A'));
+                    return ListTile(
+                      title: Text(post['title'] ?? 'N/A'),
+                      trailing: PopupMenuButton(
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            child: Text("Edit"),
+                            onTap: () {
+                              // Handle edit logic here
+
+                              editDialogBox(post['title'], post['id']);
+                            },
+                          ),
+                          PopupMenuItem(
+                            child: Text("Delete"),
+                            onTap: () {
+                              // Handle delete logic here
+                              deleteDialogBox(post['id']);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
                   } else if (post['title'].toString().toLowerCase().contains(
                     searchController.text.toLowerCase(),
                   )) {
