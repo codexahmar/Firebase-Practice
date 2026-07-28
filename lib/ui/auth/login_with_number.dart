@@ -1,5 +1,5 @@
 import 'package:firebase_practice/services/auth_service.dart';
-import 'package:firebase_practice/ui/realtimeDb/home_screen.dart';
+import 'package:firebase_practice/ui/firestore/firestore_list_screen.dart';
 import 'package:firebase_practice/utils/utils.dart';
 import 'package:firebase_practice/widgets/custom_text_field.dart';
 import 'package:firebase_practice/widgets/round_button.dart';
@@ -152,7 +152,7 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
                   if (context.mounted) {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeScreen()),
+                      MaterialPageRoute(builder: (context) => const FirestoreListScreen()),
                       (route) => false,
                     );
                   }
