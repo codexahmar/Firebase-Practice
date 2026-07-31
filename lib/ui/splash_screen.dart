@@ -38,13 +38,18 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             SizedBox(height: 20),
             Text(
-              "Firebase Practice",
+              "Firebase Master Guide",
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
                 letterSpacing: 2,
               ),
+            ),
+            SizedBox(height: 10),
+            CircularProgressIndicator(
+              color: Colors.white,
+              strokeWidth: 2,
             ),
 
           ],
